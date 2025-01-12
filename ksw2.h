@@ -168,12 +168,12 @@ static inline void ksw_cigar2eqx(void *km, const uint8_t *query, const uint8_t *
 		int op = ci0[k]&0xf, len = ci0[k]>>4;
 		if (op == KSW_CIGAR_MATCH) {
 			for (i = 0; i < len; ++i) {
-				if (target[x + i] == query[y + i]) ksw_push_cigar(km, nc1, mc1, *ci1, KSW_CIGAR_EQ, 1);
-				else ksw_push_cigar(km, nc1, mc1, *ci1, KSW_CIGAR_X, 1);
+				if (target[x + i] == query[y + i]) *ci1 = ksw_push_cigar(km, nc1, mc1, *ci1, KSW_CIGAR_EQ, 1);
+				else *ci1 = ksw_push_cigar(km, nc1, mc1, *ci1, KSW_CIGAR_X, 1);
 			}
 			x += len, y += len;
 		} else {
-			ksw_push_cigar(km, nc1, mc1, *ci1, op, len);
+			*ci1 = ksw_push_cigar(km, nc1, mc1, *ci1, op, len);
 			if (op == KSW_CIGAR_DEL || op == KSW_CIGAR_N_SKIP) x += len;
 			else if (op == KSW_CIGAR_INS) y += len;
 			else if (op == KSW_CIGAR_EQ || op == KSW_CIGAR_X) x += len, y += len;
